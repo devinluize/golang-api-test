@@ -1,0 +1,17 @@
+
+### Create New Category
+
+POST http://localhost:3000/api/binning
+Accept:application/json
+Content-Type: application/json
+
+[
+  {
+    "COMPANY_CODE":"3125098",
+    "PO_DOC_NO":"SPO-NMDI/N/SP/11/20/00183"
+  },
+  {
+    "COMPANY_CODE":"3125098",
+    "PO_DOC_NO":"SPO-NMDI/N/SP/11/20/00184"
+  }
+]
