@@ -1,4 +1,4 @@
-package web
+package payloads
 
 type BinningDetailResponses struct {
 	BinDocNo  string `gorm:"column:BIN_DOC_NO"`

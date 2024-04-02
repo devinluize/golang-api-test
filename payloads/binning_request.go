@@ -1,4 +1,4 @@
-package web
+package payloads
 
 type BinningHeaderRequest struct {
 	CompanyCode string `json:"COMPANY_CODE"`

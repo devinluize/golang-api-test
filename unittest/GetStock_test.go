@@ -1,8 +1,8 @@
 package unittest
 
 import (
+	"NewProjectTestingApi/entities"
 	"NewProjectTestingApi/helper"
-	"NewProjectTestingApi/model/domain"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/sqlserver"
@@ -20,7 +20,7 @@ func OpenCon() *gorm.DB {
 var db = OpenCon()
 
 func TestGetStock(t *testing.T) {
-	var binningStocks []domain.BinningStockDetail
+	var binningStocks []entities.BinningStockDetail
 	err := db.Raw("EXEC GetBinningStock @RefDocNo = ?, @CompanyCode = ?", "SPO-NMDI/N/SP/11/20/00183", "3125098").Scan(&binningStocks).Error
 	//err := db.Raw("EXEC GetBinningStock @RefDocNo = ?, @CompanyCode = ?", refDocNo, companyCode).Scan(&binningStocks).Error
 	for _, bs := range binningStocks {
@@ -31,12 +31,12 @@ func TestGetStock(t *testing.T) {
 	assert.Nil(t, err)
 }
 func TestGetBinningUsingTrans(t *testing.T) {
-	var BinningStockDetail []domain.BinningStockDetail
+	var BinningStockDetail []entities.BinningStockDetail
 	result := db.Raw("EXEC GetBinningStock @RefDocNo = ?, @CompanyCode = ?", "SPO-NMDI/N/SP/11/20/00183", "3125098").Scan(&BinningStockDetail)
 	helper.PanifIfError(result.Error)
 }
-func GetBinningStocsks() []domain.BinningStockDetail {
-	var binningStocks []domain.BinningStockDetail
+func GetBinningStocsks() []entities.BinningStockDetail {
+	var binningStocks []entities.BinningStockDetail
 	result := db.Raw("EXEC GetBinningStock @RefDocNo = ?, @CompanyCode = ?", "SPO-NMDI/N/SP/11/20/00183", "3125098").Scan(&binningStocks)
 	helper.PanifIfError(result.Error)
 	return binningStocks
@@ -45,7 +45,7 @@ func GetBinningStocsks() []domain.BinningStockDetail {
 }
 
 func TestGetHeader(t *testing.T) {
-	var binningStocks domain.BinningStockHeader
+	var binningStocks entities.BinningStockHeader
 	tx := db.Begin()
 	// Call the stored procedure GetHeaderByPODocNoAndCompanyCode
 	errs := tx.Raw("EXEC GetHeaderByPODocNoAndCompanyCode @PoDocNo = ?, @CompanyCode = ?", "SPO-NMDI/N/SP/11/20/00183", "3125098").Scan(&binningStocks)

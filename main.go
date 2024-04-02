@@ -2,9 +2,9 @@ package main
 
 import (
 	"NewProjectTestingApi/app"
-	"NewProjectTestingApi/controller"
-	"NewProjectTestingApi/repository"
-	"NewProjectTestingApi/service"
+	"NewProjectTestingApi/controllers"
+	"NewProjectTestingApi/repositories"
+	"NewProjectTestingApi/services"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 )
@@ -12,9 +12,9 @@ import (
 func main() {
 	//panic("tes")
 	db := app.NewDB()
-	BinningRepo := repository.NewBinningRepositoryImpl()
-	BinningService := service.NewBinningServiceImpl(db, BinningRepo)
-	BinningController := controller.NewBinningControllerImpl(BinningService)
+	BinningRepo := repositories.NewBinningRepositoryImpl()
+	BinningService := services.NewBinningServiceImpl(db, BinningRepo)
+	BinningController := controllers.NewBinningControllerImpl(BinningService)
 	router := httprouter.New()
 	router.POST("/api/binning", BinningController.FindAll)
 	server := http.Server{

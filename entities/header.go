@@ -1,4 +1,4 @@
-package domain
+package entities
 
 type BinningStockDetail struct {
 	BinDocNo  string `gorm:"column:BIN_DOC_NO"`

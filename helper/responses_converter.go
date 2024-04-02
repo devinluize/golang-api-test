@@ -1,14 +1,14 @@
 package helper
 
 import (
-	"NewProjectTestingApi/model/domain"
-	"NewProjectTestingApi/model/web"
+	"NewProjectTestingApi/entities"
+	"NewProjectTestingApi/payloads"
 	"encoding/json"
 	"net/http"
 )
 
-func ItemToHeaderResponse(binningDetail domain.BinningStockDetail) web.BinningDetailResponses {
-	return web.BinningDetailResponses{
+func ItemToHeaderResponse(binningDetail entities.BinningStockDetail) payloads.BinningDetailResponses {
+	return payloads.BinningDetailResponses{
 		BinDocNo:  binningDetail.BinDocNo,
 		BinLineNo: binningDetail.BinLineNo,
 		PoLineNo:  binningDetail.PoLineNo,
@@ -18,15 +18,15 @@ func ItemToHeaderResponse(binningDetail domain.BinningStockDetail) web.BinningDe
 		GrpoQty:   binningDetail.GrpoQty,
 	}
 }
-func ItemToHeaderResponses(binningDetail []domain.BinningStockDetail) []web.BinningDetailResponses {
-	var detailResponses []web.BinningDetailResponses
+func ItemToHeaderResponses(binningDetail []entities.BinningStockDetail) []payloads.BinningDetailResponses {
+	var detailResponses []payloads.BinningDetailResponses
 	for _, i := range binningDetail {
 		detailResponses = append(detailResponses, ItemToHeaderResponse(i))
 	}
 	return detailResponses
 }
-func ToHeaderResponse(binningHeader domain.BinningHeader) web.BinningHeaderResponses {
-	return web.BinningHeaderResponses{
+func ToHeaderResponse(binningHeader entities.BinningHeader) payloads.BinningHeaderResponses {
+	return payloads.BinningHeaderResponses{
 		CompanyCode: binningHeader.CompanyCode,
 		PoDocNo:     binningHeader.PoDocNo,
 		WHSGroup:    binningHeader.WHSGroup,
@@ -35,8 +35,8 @@ func ToHeaderResponse(binningHeader domain.BinningHeader) web.BinningHeaderRespo
 	}
 
 }
-func ToHeaderResponses(binningHeader []domain.BinningHeader) []web.BinningHeaderResponses {
-	var binningResponses []web.BinningHeaderResponses
+func ToHeaderResponses(binningHeader []entities.BinningHeader) []payloads.BinningHeaderResponses {
+	var binningResponses []payloads.BinningHeaderResponses
 	for _, i := range binningHeader {
 
 		binningResponses = append(binningResponses, ToHeaderResponse(i))

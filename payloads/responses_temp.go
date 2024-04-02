@@ -1,4 +1,4 @@
-package web
+package payloads
 
 type ResponsesTemp struct {
 }

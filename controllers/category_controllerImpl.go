@@ -1,25 +1,25 @@
-package controller
+package controllers
 
 import (
 	"NewProjectTestingApi/helper"
-	"NewProjectTestingApi/model/web"
-	"NewProjectTestingApi/service"
+	"NewProjectTestingApi/payloads"
+	"NewProjectTestingApi/services"
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 )
 
 type BinningControllerImpl struct {
-	BinningService service.BinningService
+	BinningService services.BinningService
 }
 
-func NewBinningControllerImpl(binningService service.BinningService) BinningController {
+func NewBinningControllerImpl(binningService services.BinningService) BinningController {
 	return &BinningControllerImpl{BinningService: binningService}
 }
 
 func (Controller *BinningControllerImpl) FindAll(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	//TODO implement me
-	var binningBodyRequest []web.BinningHeaderRequest
+	var binningBodyRequest []payloads.BinningHeaderRequest
 	helper.ReadFromRequestBody(request, &binningBodyRequest)
 	BinningResponses := Controller.BinningService.FindAll(request.Context(), binningBodyRequest)
 	writer.Header().Add("Content-Type", "application/json")
