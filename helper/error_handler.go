@@ -2,6 +2,7 @@ package helper
 
 import (
 	"gorm.io/gorm"
+	"io"
 )
 
 func PanifIfError(err error) {
@@ -20,5 +21,11 @@ func Rollbackiferror(tx *gorm.DB) {
 	} else {
 		errTx := tx.Commit()
 		PanifIfError(errTx.Error)
+	}
+}
+func CloseBody(body io.ReadCloser) {
+	err := body.Close()
+	if err != nil {
+		// Handle the error, such as logging or returning an error response
 	}
 }

@@ -13,5 +13,42 @@ Content-Type: application/json
   {
     "COMPANY_CODE":"3125098",
     "PO_DOC_NO":"SPO-NMDI/N/SP/11/20/00184"
+  },
+  {
+    "COMPANY_CODE":"3125098",
+    "PO_DOC_NO":"SPO-NMDI/N/SP/11/20/00185"
+  },  {
+  "COMPANY_CODE":"3125098",
+  "PO_DOC_NO":"SPO-NMDI/N/SP/11/20/00186"
+},
+  {
+    "COMPANY_CODE": "3125098",
+    "PO_DOC_NO": "SPO-NMDI/N/SP/11/20/00187"
   }
 ]
+
+
+### Register User Admin
+
+POST http://localhost:3000/Authentication/register/admin
+Accept:application/json
+Content-Type: application/json
+
+{
+  "user_name": "devinsss",
+  "user_email": "devin@gmail.com",
+  "password": "devins123"
+}
+
+### Register User hash-micro
+
+POST http://localhost:3000/Authentication/register/hash-micro
+Accept:application/json
+Content-Type: application/json
+
+{
+  "user_name": "devinsss",
+  "user_email": "devin@gmail.com",
+  "password": "devins123"
+}
+

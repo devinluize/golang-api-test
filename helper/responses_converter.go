@@ -3,6 +3,7 @@ package helper
 import (
 	"NewProjectTestingApi/entities"
 	"NewProjectTestingApi/payloads"
+	"NewProjectTestingApi/payloads/auth"
 	"encoding/json"
 	"net/http"
 )
@@ -25,7 +26,7 @@ func ItemToHeaderResponses(binningDetail []entities.BinningStockDetail) []payloa
 	}
 	return detailResponses
 }
-func ToHeaderResponse(binningHeader entities.BinningHeader) payloads.BinningHeaderResponses {
+func ToHeaderResponse(binningHeader entities.BinningStockHeader) payloads.BinningHeaderResponses {
 	return payloads.BinningHeaderResponses{
 		CompanyCode: binningHeader.CompanyCode,
 		PoDocNo:     binningHeader.PoDocNo,
@@ -35,7 +36,7 @@ func ToHeaderResponse(binningHeader entities.BinningHeader) payloads.BinningHead
 	}
 
 }
-func ToHeaderResponses(binningHeader []entities.BinningHeader) []payloads.BinningHeaderResponses {
+func ToHeaderResponses(binningHeader []entities.BinningStockHeader) []payloads.BinningHeaderResponses {
 	var binningResponses []payloads.BinningHeaderResponses
 	for _, i := range binningHeader {
 
@@ -48,5 +49,19 @@ func ReadFromRequestBody(request *http.Request, result interface{}) {
 	err := decoder.Decode(result)
 	if err != nil {
 		panic(err)
+	}
+}
+func ToDomainRegister(userInput auth.RegisterRequest) entities.User {
+	return entities.User{
+		UserName:   userInput.UserName,
+		UserEmail:  userInput.UserEmail,
+		Password:   userInput.Password,
+		UserRoleId: userInput.UserRoleId,
+	}
+}
+func ToRegisterResponses(msg string, status int) auth.RegisterResponses {
+	return auth.RegisterResponses{
+		Message: msg,
+		Status:  status,
 	}
 }

@@ -6,6 +6,7 @@ import (
 	"NewProjectTestingApi/repositories"
 	"context"
 	"gorm.io/gorm"
+	"net/http"
 )
 
 type BinningServiceImpl struct {
@@ -17,8 +18,8 @@ func NewBinningServiceImpl(DB *gorm.DB, repo repositories.BinningRepository) Bin
 	return &BinningServiceImpl{DB: DB, Repo: repo}
 }
 
-func (service *BinningServiceImpl) FindAll(ctx context.Context, Request []payloads2.BinningHeaderRequest) []payloads2.BinningHeaderResponses {
+func (service *BinningServiceImpl) FindAll(ctx context.Context, Request []payloads2.BinningHeaderRequest, httprequest *http.Request) ([]payloads2.BinningHeaderResponses, error, string) {
 	//TODO implement me
-	allBinning := service.Repo.FindAll(ctx, service.DB, Request)
-	return helper.ToHeaderResponses(allBinning)
+	allBinning, err, errMsg := service.Repo.FindAll(ctx, service.DB, Request, httprequest)
+	return helper.ToHeaderResponses(allBinning), err, errMsg
 }
