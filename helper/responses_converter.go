@@ -61,8 +61,13 @@ func ToDomainRegister(userInput auth.RegisterRequest) entities.User {
 }
 func ToAuthResponses(writer http.ResponseWriter, msg string, status int) auth.AuthResponses {
 	writer.WriteHeader(status)
+	IsSuccess := true
+	if status != 200 { //status berani not http status ok
+		IsSuccess = false
+	}
 	return auth.AuthResponses{
 		Message: msg,
 		Status:  status,
+		Success: IsSuccess,
 	}
 }

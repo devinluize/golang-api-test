@@ -18,4 +18,5 @@ type LoginRequest struct {
 type AuthResponses struct {
 	Message string `json:"message"`
 	Status  int    `json:"status"`
+	Success bool   `json:"success"`
 }
