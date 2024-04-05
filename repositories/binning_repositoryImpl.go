@@ -48,6 +48,7 @@ func Equals(bs entities.BinningStockHeader, other entities.BinningStockHeader) b
 		bs.WHSCode == other.WHSCode
 }
 func populteLogBookParams(r http.Request) entities.LogbookInsertParams {
+	//belum selesai develop
 	jsonBytes, err := json.Marshal(r)
 	helper.PanifIfError(err)
 	return entities.LogbookInsertParams{
@@ -71,7 +72,7 @@ func populteLogBookParams(r http.Request) entities.LogbookInsertParams {
 }
 
 // hashmicro
-func (b *BinningRepositoryImpl) FindAll(ctx context.Context, db *gorm.DB, binning []payloads.BinningHeaderRequest, httprequest *http.Request) ([]entities.BinningStockHeader, error, string) {
+func (b *BinningRepositoryImpl) FindAll(ctx context.Context, db *gorm.DB, binning []payloads.BinningHeaderRequest) ([]entities.BinningStockHeader, error, string) {
 	//TODO implement me
 	tx := db.Begin()
 	defer tx.Rollback()

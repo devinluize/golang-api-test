@@ -26,7 +26,7 @@ func (Controller *BinningControllerImpl) FindAll(writer http.ResponseWriter, req
 	encoder := json.NewEncoder(writer)
 	var binningBodyRequest []payloads.BinningHeaderRequest
 	helper.ReadFromRequestBody(request, &binningBodyRequest)
-	BinningResponses, errs, errMsg := Controller.BinningService.FindAll(request.Context(), binningBodyRequest, request)
+	BinningResponses, errs, errMsg := Controller.BinningService.FindAll(request.Context(), binningBodyRequest)
 
 	if errs != nil {
 		var errorResponses payloads.ErrorRespones
