@@ -11,7 +11,11 @@ func (RegisterRequest) TableName() string {
 	return "api.GoTestUsers"
 }
 
-type RegisterResponses struct {
+type LoginRequest struct {
+	UserName string `gorm:"column:user_name" json:"username"`
+	Password string `gorm:"column:password" json:"password"`
+}
+type AuthResponses struct {
 	Message string `json:"message"`
 	Status  int    `json:"status"`
 }

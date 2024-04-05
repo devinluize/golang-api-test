@@ -59,8 +59,9 @@ func ToDomainRegister(userInput auth.RegisterRequest) entities.User {
 		UserRoleId: userInput.UserRoleId,
 	}
 }
-func ToRegisterResponses(msg string, status int) auth.RegisterResponses {
-	return auth.RegisterResponses{
+func ToAuthResponses(writer http.ResponseWriter, msg string, status int) auth.AuthResponses {
+	writer.WriteHeader(status)
+	return auth.AuthResponses{
 		Message: msg,
 		Status:  status,
 	}

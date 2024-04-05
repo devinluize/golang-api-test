@@ -2,31 +2,16 @@ package auth_controller
 
 import (
 	"NewProjectTestingApi/app"
+	"NewProjectTestingApi/config"
 	"NewProjectTestingApi/helper"
 	"NewProjectTestingApi/payloads/auth"
 	"NewProjectTestingApi/services/authServices"
 	"encoding/json"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/mux"
-	"gorm.io/driver/sqlserver"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 	"net/http"
+	"time"
 )
-
-func OpenCon() *gorm.DB {
-	dsn := "sqlserver://binus_intern:Binus1an@10.1.32.65:1433?database=DMSLIVE_TESTING"
-	db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
-	})
-	//dsn := "sqlserver://binus_intern:Binus1an@10.1.32.65:1433?database=DMSLIVE_TESTING"
-
-	if err != nil {
-		panic(err)
-	}
-	return db
-}
-
-var db2 = OpenCon()
 
 func Register(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
@@ -34,10 +19,10 @@ func Register(writer http.ResponseWriter, request *http.Request) {
 	var userInput auth.RegisterRequest
 	decoder := json.NewDecoder(request.Body)
 	encoder := json.NewEncoder(writer)
-	var response auth.RegisterResponses
+	var response auth.AuthResponses
 	writer.Header().Add("Content-Type", "application/json")
 	if err := decoder.Decode(&userInput); err != nil {
-		response = helper.ToRegisterResponses("Bad Request Format Wrong", http.StatusBadRequest)
+		response = helper.ToAuthResponses(writer, "Bad Request Format Wrong", http.StatusBadRequest)
 		writer.WriteHeader(http.StatusBadRequest)
 		err := encoder.Encode(response)
 		helper.PanifIfError(err)
@@ -50,16 +35,69 @@ func Register(writer http.ResponseWriter, request *http.Request) {
 		userInput.UserRoleId = 2
 	} else {
 		http.Error(writer, "End Point Wrong", http.StatusBadRequest)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := encoder.Encode(response)
+		helper.PanifIfError(err)
 	}
 	msg, err := authServices.Register(userInput, app.DB)
 	if err != nil {
-		response = helper.ToRegisterResponses(msg, http.StatusBadRequest)
-		panic(err)
+		response = helper.ToAuthResponses(writer, msg, http.StatusBadRequest)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := encoder.Encode(response)
+		helper.PanifIfError(err)
 	}
-	response = helper.ToRegisterResponses(msg, http.StatusOK)
+	response = helper.ToAuthResponses(writer, msg, http.StatusOK)
+	writer.WriteHeader(http.StatusBadRequest)
 	err = encoder.Encode(response)
 	helper.PanifIfError(err)
 }
 func Login(writer http.ResponseWriter, request *http.Request) {
-
+	var userInput auth.LoginRequest
+	decoder := json.NewDecoder(request.Body)
+	encoder := json.NewEncoder(writer)
+	var response auth.AuthResponses
+	writer.Header().Add("Content-Type", "application/json")
+	if err := decoder.Decode(&userInput); err != nil {
+		response = helper.ToAuthResponses(writer, "Format Login Wrong", http.StatusBadRequest)
+		return
+	}
+	helper.CloseBody(request.Body)
+	msg, err, roleid := authServices.Login(userInput, app.DB)
+	if err != nil {
+		response = helper.ToAuthResponses(writer, msg, http.StatusUnauthorized)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := encoder.Encode(response)
+		helper.PanifIfError(err)
+		return
+	}
+	expTime := time.Now().Add(time.Minute * 10)
+	claims := config.JWTClaim{
+		UserName: userInput.UserName,
+		UserRole: roleid,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Issuer:    "devin",
+			ExpiresAt: jwt.NewNumericDate(expTime),
+		},
+	}
+	tokenAlgo := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token, err := tokenAlgo.SignedString(config.JWT_KEY)
+	if err != nil {
+		response = helper.ToAuthResponses(writer, err.Error(), http.StatusBadRequest)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := encoder.Encode(response)
+		helper.PanifIfError(err)
+		return
+	}
+	http.SetCookie(
+		writer, &http.Cookie{
+			Name:     "token",
+			Value:    token,
+			Path:     "/",
+			HttpOnly: true,
+		})
+	response = helper.ToAuthResponses(writer, "Success Login", http.StatusOK)
+	writer.WriteHeader(http.StatusOK)
+	err = encoder.Encode(response)
+	helper.PanifIfError(err)
+	return
 }

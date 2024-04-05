@@ -4,6 +4,7 @@ import (
 	"NewProjectTestingApi/app"
 	"NewProjectTestingApi/controllers"
 	"NewProjectTestingApi/controllers/auth_controller"
+	"NewProjectTestingApi/middleware"
 	"NewProjectTestingApi/repositories"
 	"NewProjectTestingApi/services"
 	"github.com/gorilla/mux"
@@ -17,10 +18,15 @@ func setupRoute() *mux.Router {
 	//router := httprouter.New()
 	routers := mux.NewRouter()
 	//router.POST("/api/binning", BinningController.FindAll)
-	routers.HandleFunc("/api/binning", BinningController.FindAll).Methods("POST")
-	routers.HandleFunc("/api/Authentication/register/{role}", auth_controller.Register).Methods("POST")
-	//routers.HandleFunc("/api/Authentication/register/{role}", auth_controller.RegisterHashMicro).Methods("POST")
+
+	ProtectedRoute := routers.PathPrefix("").Subrouter()
+
+	ProtectedRoute.HandleFunc("/api/binning", BinningController.FindAll).Methods("POST")
+
+	ProtectedRoute.HandleFunc("/api/Authentication/register/{role}", auth_controller.Register).Methods("POST")
 	routers.HandleFunc("/api/Authentication/login", auth_controller.Login).Methods("POST")
+
+	ProtectedRoute.Use(middleware.RouterMiddleware)
 	return routers
 	//router.POST("/api/authentication/register")
 
