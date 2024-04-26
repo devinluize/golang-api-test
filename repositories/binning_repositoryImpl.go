@@ -47,6 +47,9 @@ func Equals(bs entities.BinningStockHeader, other entities.BinningStockHeader) b
 		bs.WHSGroup == other.WHSGroup &&
 		bs.WHSCode == other.WHSCode
 }
+
+var log entities.LogbookInsertParams
+
 func populteLogBookParams(r http.Request) entities.LogbookInsertParams {
 	//belum selesai develop
 	jsonBytes, err := json.Marshal(r)
@@ -72,8 +75,13 @@ func populteLogBookParams(r http.Request) entities.LogbookInsertParams {
 }
 
 // hashmicro
-func (b *BinningRepositoryImpl) FindAll(ctx context.Context, db *gorm.DB, binning []payloads.BinningHeaderRequest) ([]entities.BinningStockHeader, error, string) {
+func (b *BinningRepositoryImpl) FindAll(ctx context.Context, db *gorm.DB, binning []payloads.BinningHeaderRequest, Log *entities.LogbookInsertParams) ([]entities.BinningStockHeader, error, string) {
 	//TODO implement me
+	Log.ApiName = "api/bininglist"
+	Log.ApiMethod = "POST"
+	Log.ApiUrl = "api/binning"
+	Log.ApiStart = time.Now()
+
 	tx := db.Begin()
 	defer tx.Rollback()
 	var BinningHeader []entities.BinningStockHeader
@@ -101,15 +109,11 @@ func (b *BinningRepositoryImpl) FindAll(ctx context.Context, db *gorm.DB, binnin
 		binningStocks.Item = BinningStockDetail
 		BinningHeader = append(BinningHeader, binningStocks)
 	}
-	//ApiParams
-	//var logbookinsertparams entities.LogbookInsertParams
-
 	if err != nil || errOnDetail != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return BinningHeader, err, "Record Not Found"
 		}
 		return BinningHeader, err, "Error Reading to Database"
 	}
-
 	return BinningHeader, nil, ""
 }

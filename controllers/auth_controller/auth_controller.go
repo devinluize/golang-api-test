@@ -51,6 +51,16 @@ func Register(writer http.ResponseWriter, request *http.Request) {
 	err = encoder.Encode(response)
 	helper.PanifIfError(err)
 }
+
+// Login Login
+//
+//	@Summary		Login
+//	@Description	Login for user
+//	@Tags			Auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body	auth.LoginRequest	true	"Insert Header Request"
+//	@Router			/api/Authentication/login [post]
 func Login(writer http.ResponseWriter, request *http.Request) {
 	var userInput auth.LoginRequest
 	decoder := json.NewDecoder(request.Body)
@@ -79,6 +89,7 @@ func Login(writer http.ResponseWriter, request *http.Request) {
 			ExpiresAt: jwt.NewNumericDate(expTime),
 		},
 	}
+
 	tokenAlgo := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, err := tokenAlgo.SignedString(config.JWT_KEY)
 	if err != nil {

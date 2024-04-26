@@ -1,6 +1,7 @@
 package services
 
 import (
+	"NewProjectTestingApi/entities"
 	"NewProjectTestingApi/helper"
 	payloads2 "NewProjectTestingApi/payloads"
 	"NewProjectTestingApi/repositories"
@@ -17,8 +18,8 @@ func NewBinningServiceImpl(DB *gorm.DB, repo repositories.BinningRepository) Bin
 	return &BinningServiceImpl{DB: DB, Repo: repo}
 }
 
-func (service *BinningServiceImpl) FindAll(ctx context.Context, Request []payloads2.BinningHeaderRequest) ([]payloads2.BinningHeaderResponses, error, string) {
+func (service *BinningServiceImpl) FindAll(ctx context.Context, Request []payloads2.BinningHeaderRequest, Log *entities.LogbookInsertParams) ([]payloads2.BinningHeaderResponses, error, string) {
 	//TODO implement me
-	allBinning, err, errMsg := service.Repo.FindAll(ctx, service.DB, Request)
+	allBinning, err, errMsg := service.Repo.FindAll(ctx, service.DB, Request, Log)
 	return helper.ToHeaderResponses(allBinning), err, errMsg
 }

@@ -8,5 +8,5 @@ import (
 )
 
 type BinningRepository interface {
-	FindAll(ctx context.Context, db *gorm.DB, binning []payloads.BinningHeaderRequest) ([]entities.BinningStockHeader, error, string)
+	FindAll(ctx context.Context, db *gorm.DB, binning []payloads.BinningHeaderRequest, Log *entities.LogbookInsertParams) ([]entities.BinningStockHeader, error, string)
 }
