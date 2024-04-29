@@ -1,0 +1,161 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a practice api spec for getting binning list.",
+        "title": "Binning List",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/http://localhost:3030/",
+    "paths": {
+        "/api/Authentication/login": {
+            "post": {
+                "description": "Login for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "Insert Header Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/binning": {
+            "post": {
+                "description": "Get Binning List By Header",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tags1Test"
+                ],
+                "summary": "Show An Binning List",
+                "parameters": [
+                    {
+                        "description": "Insert Header Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/payloads.BinningHeaderRequest"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/payloads.BinningHeaderResponses"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "auth.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "payloads.BinningDetailResponses": {
+            "type": "object",
+            "properties": {
+                "binDocNo": {
+                    "type": "string"
+                },
+                "binLineNo": {
+                    "type": "string"
+                },
+                "caseNo": {
+                    "type": "string"
+                },
+                "grpoQty": {
+                    "type": "integer"
+                },
+                "itemCode": {
+                    "type": "string"
+                },
+                "locCode": {
+                    "type": "string"
+                },
+                "poLineNo": {
+                    "type": "string"
+                }
+            }
+        },
+        "payloads.BinningHeaderRequest": {
+            "type": "object",
+            "properties": {
+                "COMPANY_CODE": {
+                    "type": "string"
+                },
+                "PO_DOC_NO": {
+                    "type": "string"
+                }
+            }
+        },
+        "payloads.BinningHeaderResponses": {
+            "type": "object",
+            "properties": {
+                "companyCode": {
+                    "type": "string"
+                },
+                "item": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/payloads.BinningDetailResponses"
+                    }
+                },
+                "poDocNo": {
+                    "type": "string"
+                },
+                "whscode": {
+                    "type": "string"
+                },
+                "whsgroup": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

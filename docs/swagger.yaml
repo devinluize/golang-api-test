@@ -1,0 +1,106 @@
+basePath: /http://localhost:3030/
+definitions:
+  auth.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  payloads.BinningDetailResponses:
+    properties:
+      binDocNo:
+        type: string
+      binLineNo:
+        type: string
+      caseNo:
+        type: string
+      grpoQty:
+        type: integer
+      itemCode:
+        type: string
+      locCode:
+        type: string
+      poLineNo:
+        type: string
+    type: object
+  payloads.BinningHeaderRequest:
+    properties:
+      COMPANY_CODE:
+        type: string
+      PO_DOC_NO:
+        type: string
+    type: object
+  payloads.BinningHeaderResponses:
+    properties:
+      companyCode:
+        type: string
+      item:
+        items:
+          $ref: '#/definitions/payloads.BinningDetailResponses'
+        type: array
+      poDocNo:
+        type: string
+      whscode:
+        type: string
+      whsgroup:
+        type: string
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a practice api spec for getting binning list.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Binning List
+  version: "1.0"
+paths:
+  /api/Authentication/login:
+    post:
+      consumes:
+      - application/json
+      description: Login for user
+      parameters:
+      - description: Insert Header Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses: {}
+      summary: Login
+      tags:
+      - Auth
+  /api/binning:
+    post:
+      consumes:
+      - application/json
+      description: Get Binning List By Header
+      parameters:
+      - description: Insert Header Request
+        in: body
+        name: request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/payloads.BinningHeaderRequest'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/payloads.BinningHeaderResponses'
+            type: array
+      summary: Show An Binning List
+      tags:
+      - Tags1Test
+swagger: "2.0"
